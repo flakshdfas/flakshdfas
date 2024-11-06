@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WiFi Management Portal</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #0a0a0a;
+            color: #00ff00;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background-color: #1a1a1a;
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #2a2a2a;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #00ff00;
+            color: #0a0a0a;
+            border: none;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #00cc00;
+        }
+        #loginForm {
+            max-width: 300px;
+            margin: 0 auto;
+        }
+        #clientTable {
+            display: none;
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        #clientTable th, #clientTable td {
+            border: 1px solid #00ff00;
+            padding: 10px;
+            text-align: left;
+        }
+        #clientTable th {
+            background-color: #2a2a2a;
+        }
+        .action-button {
+            background-color: #2a2a2a;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 5px 10px;
+            margin: 2px;
+            cursor: pointer;
+        }
+        .action-button:hover {
+            background-color: #00ff00;
+            color: #0a0a0a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>WiFi Management Portal</h2>
+        <form id="loginForm">
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        <table id="clientTable">
+            <thead>
+                <tr>
+                    <th>SSID</th>
+                    <th>IP Address</th>
+                    <th>MAC Address</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="clientTableBody">
+                <!-- Client rows will be inserted here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const clients = [
+            { ssid: 'TechNet_5G', ip: '192.168.1.100', mac: '00:1A:2B:3C:4D:5E' },
+            { ssid: 'TechNet_5G', ip: '192.168.1.101', mac: '00:2C:4E:6F:8G:9H' },
+            { ssid: 'TechNet_2.4G', ip: '192.168.1.102', mac: '00:3D:5F:7I:9J:1K' },
+            { ssid: 'TechNet_5G', ip: '192.168.1.103', mac: '00:4G:6H:8L:2M:3N' },
+            { ssid: 'TechNet_2.4G', ip: '192.168.1.104', mac: '00:5I:7J:9N:1O:2P' }
+        ];
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('clientTable').style.display = 'table';
+            populateClientTable();
+        });
+
+        function populateClientTable() {
+            const tableBody = document.getElementById('clientTableBody');
+            clients.forEach(client => {
+                const row = tableBody.insertRow();
+                row.insertCell(0).textContent = client.ssid;
+                row.insertCell(1).textContent = client.ip;
+                row.insertCell(2).textContent = client.mac;
+                const actionsCell = row.insertCell(3);
+                actionsCell.innerHTML = `
+                    <button class="action-button" onclick="kickClient('${client.mac}')">Kick</button>
+                    <button class="action-button" onclick="showDetails('${client.mac}')">Details</button>
+                `;
+            });
+        }
+
+        function kickClient(mac) {
+            alert(`Client with MAC ${mac} has been kicked from the network`);
+        }
+
+        function showDetails(mac) {
+            alert(`Displaying detailed information for client with MAC ${mac}`);
+        }
+    </script>
+</body>
+</html>
